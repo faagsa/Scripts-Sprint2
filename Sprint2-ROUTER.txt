@@ -1,0 +1,68 @@
+enable
+configure terminal
+hostname RT-01
+banner motd "acesso apenas para pessoas autorizadas"
+enable secret SenhadaEnable
+service password-encryption
+ip domain-name arryn.local
+crypto key generate rsa general-keys modulus 1024
+username FabricioGomes privilege 15 secret Gomes
+username KevinWitt privilege 15 secret Witt
+username AlexFaria  privilege 15 secret Faria
+username ThomazRissi privilege 15 secret Rissi
+login block-for 180 attempts 3 within 60
+security passwords min-length 8
+line console 0
+password SenhadaConsole
+login
+exit
+line vty 0 15
+transport input ssh
+exec-timeout 10
+login local
+exit
+interface gigabitethernet 0/0
+no shutdown
+exit
+interface g0/0.10
+encapsulation dot1q 10
+ip address 172.16.0.1 255.255.248.0
+description setor de voz
+interface g0/0.15
+encapsulation dot1q 15
+ip address 172.16.8.1 255.255.248.0
+description setor consultores
+interface g0/0.20
+encapsulation dot1q 20
+ip address 172.16.16.1 255.255.254.0
+description setor de analistas
+interface g0/0.25
+encapsulation dot1q 25
+ip address 172.16.18.1 255.255.255.128
+description setor de rh
+interface g0/0.30
+encapsulation dot1q 30
+ip address 172.16.18.129 255.255.255.128
+description administracao
+interface g0/0.35
+encapsulation dot1q 35
+ip address 172.16.19.1 255.255.255.128
+description setor de financas
+interface g0/0.40
+encapsulation dot1q 40
+ip address 172.16.19.129 255.255.255.192
+description setor de ti
+interface g0/0.50
+encapsulation dot1q 50
+ip address 172.16.19.193 255.255.255.192
+description setor de recepcao
+interface g0/0.45
+encapsulation dot1q 45
+ip address 172.16.20.1 255.255.255.224
+description setor de qualidade
+interface g0/0.99
+encapsulation dot1q 99
+ip address 172.16.20.33 255.255.255.240
+description setor de equipamentos
+exit
+do wr

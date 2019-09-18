@@ -1,0 +1,63 @@
+enable
+configure terminal
+hostname SW-CORE
+banner motd "acesso apenas para pessoas autorizadas"
+enable secret SenhadaEnable
+service password-encryption
+ip domain-name arryn.local
+crypto key generate rsa general-keys modulus 1024
+username FabricioGomes privilege 15 secret Gomes
+username KevinWitt privilege 15 secret Witt
+username AlexFaria  privilege 15 secret Faria
+username ThomazRissi privilege 15 secret Rissi
+line console 0
+password SenhadaConsole
+login
+exit
+line vty 0 15
+transport input ssh
+exec-timeout 10
+login local
+exit
+vlan 10
+name voz
+vlan 15
+name consultores
+vlan 20
+name analistas
+vlan 25
+name RH
+vlan 30
+name administracao
+vlan 35
+name financas
+vlan 40
+name ti
+vlan 45
+name qualidade
+vlan 50
+name recepcao
+vlan 99
+name equipamentos
+exit
+interface g0/1
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 10,15,20,25,30,35,40,45,50,99
+no shutdown
+exit
+interface g0/2
+switchport mode trunk
+switchport trunk allowed vlan 10,15,20,25,30,35,40,45,50,99
+no shutdown
+exit
+interface f0/2
+switchport mode access
+switchport access vlan 99
+exit
+interface vlan 99
+ip address 172.16.20.46 255.255.255.240
+description interface de gerenciamento
+exit
+ip default-gateway 172.16.20.33
+do wr
